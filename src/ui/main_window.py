@@ -13,7 +13,6 @@ class LoginWindow:
         self.root.configure(bg=CORES['bg_app'])
         self.on_success = on_success_callback
         
-        # Centralizar
         frame = tk.Frame(root, bg="white", padx=20, pady=20)
         frame.place(relx=0.5, rely=0.5, anchor="center")
         
@@ -22,12 +21,12 @@ class LoginWindow:
         tk.Label(frame, text="Usuário:", font=FONTES['label'], bg="white").pack(anchor="w")
         self.user_entry = ttk.Entry(frame)
         self.user_entry.pack(fill="x", pady=5)
-        self.user_entry.insert(0, "admin") # Pré-preenchido
+        self.user_entry.insert(0, "admin")
         
         tk.Label(frame, text="Senha:", font=FONTES['label'], bg="white").pack(anchor="w")
         self.pass_entry = ttk.Entry(frame, show="*")
         self.pass_entry.pack(fill="x", pady=5)
-        self.pass_entry.insert(0, "admin") # Pré-preenchido
+        self.pass_entry.insert(0, "admin")
         
         ttk.Button(frame, text="ENTRAR", command=self.check_login, style='Primary.TButton').pack(fill="x", pady=20)
         
@@ -41,6 +40,7 @@ class LoginWindow:
             self.on_success()
         else:
             messagebox.showerror("Erro", "Acesso Negado! Tente admin/admin")
+
 
 # --- CLASSE PRINCIPAL ---
 class MotorcycleManagerApp:
@@ -63,7 +63,6 @@ class MotorcycleManagerApp:
         self.setup_style()
         self.setup_variables()
         
-        # Layout
         self.setup_dashboard()
         
         self.notebook_container = tk.Frame(self.root, bg=CORES['bg_app'])
@@ -139,7 +138,6 @@ class MotorcycleManagerApp:
         self.dash_frame.pack(fill="x", side="top")
         tk.Frame(self.dash_frame, bg="#BDC3C7", height=1).pack(side="bottom", fill="x")
         
-        # A linha abaixo causou o erro anteriormente
         container = tk.Frame(self.dash_frame, bg="white")
         container.pack(pady=15, padx=30, fill="x")
         
@@ -254,21 +252,23 @@ class MotorcycleManagerApp:
         
         cols = ('id', 'moto', 'desc', 'valor', 'data')
         self.tree_gastos = ttk.Treeview(right_frame, columns=cols, show='headings')
-        for c in cols: self.tree_gastos.heading(c, text=c.upper()); self.tree_gastos.column(c, width=100)
+        for c in cols:
+            self.tree_gastos.heading(c, text=c.upper())
+            self.tree_gastos.column(c, width=100)
         self.tree_gastos.pack(fill="both", expand=True)
         self.view_expenses()
 
     def create_input_simple(self, parent, label, var):
-        c = ttk.Frame(parent); c.pack(fill='x', pady=(0, 15))
+        c = ttk.Frame(parent)
+        c.pack(fill='x', pady=(0, 15))
         ttk.Label(c, text=label, font=FONTES['label'], foreground='#555').pack(anchor='w')
         ttk.Entry(c, textvariable=var).pack(fill='x', pady=(2, 0))
 
-  # --- SUBSTITUA O MÉTODO setup_tab_relatorios POR ESTE ---
+    # --- ABA 3: RELATÓRIOS ---
     def setup_tab_relatorios(self):
         frame = ttk.Frame(self.tab_relatorios, padding="20")
         frame.pack(fill="both", expand=True)
         
-        # 1. Área de Busca (Topo)
         frm_busca = ttk.LabelFrame(frame, text=" 🔍 Busca Inteligente (Filtro SQL) ", padding=15)
         frm_busca.pack(fill="x", pady=(0, 15))
         
@@ -276,64 +276,45 @@ class MotorcycleManagerApp:
         ttk.Entry(frm_busca, textvariable=self.busca_var, width=40).pack(side="left", padx=5)
         ttk.Button(frm_busca, text="🔎 BUSCAR AGORA", command=self.executar_busca, style='Primary.TButton').pack(side="left", padx=10)
 
-        # 2. Botões de Consultas (Meio)
         btn_box = ttk.LabelFrame(frame, text=" 📊 Selecione um Relatório Complexo (Etapa 5) ", padding=15)
         btn_box.pack(fill='x', pady=(0, 15))
         
         grid_frm = tk.Frame(btn_box, bg=CORES['bg_app'])
         grid_frm.pack(fill='x')
 
-        # Botões grandes e claros
-        b1 = ttk.Button(grid_frm, text="📑 Detalhes Completos\n(3 Tabelas JOIN)", command=self.rel_3_tabelas, width=25)
-        b1.grid(row=0, column=0, padx=10, pady=5)
-        
-        b2 = ttk.Button(grid_frm, text="💰 Motos Acima da Média\n(Subquery SQL)", command=self.rel_subquery, width=25)
-        b2.grid(row=0, column=1, padx=10, pady=5)
-        
-        b3 = ttk.Button(grid_frm, text="📈 Lucro por Categoria\n(Group By + AVG)", command=self.rel_agregacao, width=25)
-        b3.grid(row=0, column=2, padx=10, pady=5)
-        
-        b4 = ttk.Button(grid_frm, text="⭐ Categorias Premium\n(Cláusula IN)", command=self.rel_multiset, width=25)
-        b4.grid(row=0, column=3, padx=10, pady=5)
-        
-        # Centralizar botões
+        ttk.Button(grid_frm, text="📑 Detalhes Completos\n(3 Tabelas JOIN)", command=self.rel_3_tabelas, width=25).grid(row=0, column=0, padx=10, pady=5)
+        ttk.Button(grid_frm, text="💰 Motos Acima da Média\n(Subquery SQL)", command=self.rel_subquery, width=25).grid(row=0, column=1, padx=10, pady=5)
+        ttk.Button(grid_frm, text="📈 Lucro por Categoria\n(Group By + AVG)", command=self.rel_agregacao, width=25).grid(row=0, column=2, padx=10, pady=5)
+        ttk.Button(grid_frm, text="⭐ Categorias Premium\n(Cláusula IN)", command=self.rel_multiset, width=25).grid(row=0, column=3, padx=10, pady=5)
+
         for i in range(4): grid_frm.columnconfigure(i, weight=1)
 
-        # 3. Área de Resultado (Tabela Dinâmica ao invés de Texto)
         res_frame = ttk.LabelFrame(frame, text=" Resultados da Consulta ", padding=10)
         res_frame.pack(fill="both", expand=True)
         
-        # Scrollbars
         scroll_y = ttk.Scrollbar(res_frame)
         scroll_y.pack(side="right", fill="y")
         scroll_x = ttk.Scrollbar(res_frame, orient="horizontal")
         scroll_x.pack(side="bottom", fill="x")
         
-        # Treeview Dinâmica (Sem colunas definidas inicialmente)
-        self.tree_relatorios = ttk.Treeview(res_frame, show='headings', 
-                                            yscrollcommand=scroll_y.set, 
+        self.tree_relatorios = ttk.Treeview(res_frame, show='headings',
+                                            yscrollcommand=scroll_y.set,
                                             xscrollcommand=scroll_x.set)
         self.tree_relatorios.pack(fill="both", expand=True)
         
         scroll_y.config(command=self.tree_relatorios.yview)
         scroll_x.config(command=self.tree_relatorios.xview)
 
-    # --- SUBSTITUA O MÉTODO _exibir_resultado POR ESTE ---
     def _exibir_resultado(self, titulo, colunas, dados):
-        # Limpa a tabela atual
         self.tree_relatorios.delete(*self.tree_relatorios.get_children())
         
-        # Redefine as colunas dinamicamente baseadas na consulta
         self.tree_relatorios['columns'] = colunas
         
-        # Configura os cabeçalhos
         for col in colunas:
             self.tree_relatorios.heading(col, text=col.upper())
-            # Ajusta largura: Descrição e Moto ficam maiores, o resto menor
             width = 300 if col in ['Descrição', 'Moto', 'Modelo'] else 120
             self.tree_relatorios.column(col, width=width, anchor="center")
             
-        # Insere os dados
         if not dados:
             messagebox.showinfo("Aviso", "Nenhum registro encontrado para esta consulta.")
             return
@@ -341,7 +322,6 @@ class MotorcycleManagerApp:
         for row in dados:
             valores_formatados = []
             for item in row:
-                # Formata Moeda se for float
                 if isinstance(item, float):
                     valores_formatados.append(f"R$ {item:,.2f}")
                 else:
@@ -374,14 +354,39 @@ class MotorcycleManagerApp:
         cols = ["ID", "Modelo", "Placa", "Venda (R$)"]
         self._exibir_resultado("RESULTADO DA BUSCA", cols, dados)
 
-    # --- FUNÇÕES AUXILIARES ---
     def view_records(self):
+        # Limpa a tabela
         for i in self.tree.get_children(): self.tree.delete(i)
+        
+        # Busca os dados do banco
         for row in self.dao.listar_motos_completas():
             l = list(row)
+            
+            # A ORDEM QUE VEM DO BANCO É:
+            # [0] id, [1] nome, [2] ano, [3] invest, [4] venda, [5] placa, [6] status, [7] categoria
+            
+            # 1. Formatação de Moeda (mantém igual)
             l[3] = f"R$ {l[3]:.2f}" if l[3] is not None else "R$ 0.00"
             l[4] = f"R$ {l[4]:.2f}" if l[4] is not None else "-"
-            self.tree.insert('', 'end', values=l)
+            
+            # 2. CORREÇÃO DA ORDEM (O Pulo do Gato 🐱)
+            # A Treeview espera: [id, nome, CATEGORIA, ano, invest, venda, placa, status]
+            # Então montamos uma nova lista na ordem certa:
+            
+            dados_ordenados = [
+                l[0],  # id
+                l[1],  # nome
+                l[7],  # categoria (Estava na posição 7, movemos para a 2)
+                l[2],  # ano
+                l[3],  # invest
+                l[4],  # venda
+                l[5],  # placa
+                l[6]   # status
+            ]
+            
+            self.tree.insert('', 'end', values=dados_ordenados)
+
+        # Atualiza os comboboxes (mantém igual)
         self.carregar_categorias()
         self.combo_categoria_form['values'] = list(self.categorias_map.keys())
         motos = self.dao.listar_motos_completas()
@@ -400,12 +405,16 @@ class MotorcycleManagerApp:
                 self.placa_text.get(), self.km_text.get(), self.cor_text.get(), cat_id
             )
             self.dao.inserir_moto(dados)
-            self.clear_fields(); self.view_records(); self.update_dashboard()
+            self.clear_fields()
+            self.view_records()
+            self.update_dashboard()
             messagebox.showinfo("Sucesso", "Moto adicionada!")
-        except Exception as e: messagebox.showerror("Erro", str(e))
+        except Exception as e:
+            messagebox.showerror("Erro", str(e))
 
     def update_record(self):
-        if not self.selected_id: return
+        if not self.selected_id:
+            return
         try:
             cat_id = self.categorias_map.get(self.categoria_text.get())
             dados = (
@@ -414,14 +423,19 @@ class MotorcycleManagerApp:
                 self.placa_text.get(), self.km_text.get(), self.cor_text.get(), cat_id
             )
             self.dao.atualizar_moto(dados, self.selected_id)
-            self.view_records(); self.clear_fields(); self.update_dashboard()
+            self.view_records()
+            self.clear_fields()
+            self.update_dashboard()
             messagebox.showinfo("Sucesso", "Atualizado!")
-        except Exception as e: messagebox.showerror("Erro", str(e))
+        except Exception as e:
+            messagebox.showerror("Erro", str(e))
 
     def delete_record(self):
         if self.selected_id and messagebox.askyesno("Confirmar", "Excluir?"):
             self.dao.deletar_moto(self.selected_id)
-            self.clear_fields(); self.view_records(); self.update_dashboard()
+            self.clear_fields()
+            self.view_records()
+            self.update_dashboard()
 
     def save_expense(self):
         try:
@@ -433,27 +447,38 @@ class MotorcycleManagerApp:
             val = float(self.gasto_valor.get())
             dt = datetime.now().strftime("%d/%m/%Y")
             self.dao.inserir_gasto(moto_id, self.gasto_descricao.get(), val, dt)
-            self.gasto_valor.set(""); self.gasto_descricao.set("")
-            self.view_expenses(); self.view_records(); self.update_dashboard()
+            self.gasto_valor.set("")
+            self.gasto_descricao.set("")
+            self.view_expenses()
+            self.view_records()
+            self.update_dashboard()
             messagebox.showinfo("Sucesso", "Gasto lançado!")
-        except Exception as e: messagebox.showerror("Erro", str(e))
+        except Exception as e:
+            messagebox.showerror("Erro", str(e))
 
     def view_expenses(self):
-        for i in self.tree_gastos.get_children(): self.tree_gastos.delete(i)
+        for i in self.tree_gastos.get_children():
+            self.tree_gastos.delete(i)
         for row in self.dao.listar_todos_gastos_com_nomes():
             self.tree_gastos.insert('', 'end', values=row)
 
     def get_selected_row(self, event):
         sel = self.tree.selection()
-        if not sel: return
+        if not sel:
+            return
         iid = self.tree.item(sel[0], 'values')[0]
         self.selected_id = iid
         moto = self.dao.buscar_moto_por_id(iid)
         if moto:
-            self.nome_text.set(moto[1]); self.ano_text.set(moto[2])
-            self.valor_compra_text.set(moto[3]); self.valor_venda_text.set(moto[4])
-            self.antigo_dono_text.set(moto[5]); self.status_text.set(moto[6])
-            self.placa_text.set(moto[7]); self.km_text.set(moto[8]); self.cor_text.set(moto[9])
+            self.nome_text.set(moto[1])
+            self.ano_text.set(moto[2])
+            self.valor_compra_text.set(moto[3])
+            self.valor_venda_text.set(moto[4])
+            self.antigo_dono_text.set(moto[5])
+            self.status_text.set(moto[6])
+            self.placa_text.set(moto[7])
+            self.km_text.set(moto[8])
+            self.cor_text.set(moto[9])
             cat_id = moto[10]
             for nome, cid in self.categorias_map.items():
                 if cid == cat_id:
@@ -461,6 +486,25 @@ class MotorcycleManagerApp:
                     break
 
     def clear_fields(self):
-        for var in [self.nome_text, self.ano_text, self.valor_compra_text, self.valor_venda_text, 
-                    self.antigo_dono_text, self.placa_text, self.km_text, self.cor_text, self.categoria_text]: var.set("")
+        for var in [
+            self.nome_text, self.ano_text, self.valor_compra_text, self.valor_venda_text,
+            self.antigo_dono_text, self.placa_text, self.km_text, self.cor_text, self.categoria_text
+        ]:
+            var.set("")
         self.selected_id = None
+
+
+# --- FUNÇÃO PRINCIPAL PARA EXECUTAR ---
+def start_app():
+    root_login = tk.Tk()
+    LoginWindow(root_login, lambda: run_main_app())
+    root_login.mainloop()
+
+def run_main_app():
+    root = tk.Tk()
+    MotorcycleManagerApp(root)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    start_app()
